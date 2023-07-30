@@ -27,12 +27,6 @@ blueprint:
         device:
           integration: mobile_app
 
-    notify_discord:
-      name: Discord bot to notify
-      description: Discord Bot integration to be used to send notification
-      selector:
-        device:
-          integration: discord
 
     is_ios:
       name: Is it an iOS device?
@@ -74,7 +68,6 @@ variables:
   camera: !input camera
   camera_name: "{{ states[camera].name }}"
   notify_device: !input notify_device
-  notify_discord: !input notify_discord
   is_ios: !input is_ios
   notification_title: !input notification_title
   notification_message: !input notification_message
