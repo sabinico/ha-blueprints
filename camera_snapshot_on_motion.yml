@@ -100,25 +100,25 @@ action:
       {% set ios_data = {"attachment": {"url": "%s", "content_type": "JPEG"}} | format(snapshot_access_file_path) %}
       {{ ios_data if is_ios else android_data }}
 
-  - device_id: !input notify_discord
-    domain: discord
-    type: notify
-    message: ""
-    target: ["141550930465259520", "1135288079637303316"]
+  - service: notify.sabi_home
     data:
-      embed:
-        title: 'Motion Detected'
-        description: "Se ha detectado movimiento en {{ motion_sensor_name }}"
-        url: 'https://my.home-assistant.io/'
-        color: 5685745
-        author:
-          name: 'Sabi Home Assistant'
+      type: notify
+      message: ""
+      target: ["141550930465259520", "1135288079637303316"]
+      data:
+        embed:
+          title: 'Motion Detected'
+          description: "Se ha detectado movimiento en {{ motion_sensor_name }}"
           url: 'https://my.home-assistant.io/'
-          icon_url: 'https://www.home-assistant.io/images/favicon-192x192-full.png'
-        footer:
-          text: "Generated from {{ camera_name }} at {{ states('sensor.date_time_iso') }}"
-          icon_url: 'https://www.home-assistant.io/images/favicon-192x192-full.png'
-        thumbnail:
-          url: 'https://www.home-assistant.io/images/favicon-192x192-full.png'
-        image:
-          url: 'https://www.home-assistant.io/images/favicon-192x192-full.png'
+          color: 5685745
+          author:
+            name: 'Sabi Home Assistant'
+            url: 'https://my.home-assistant.io/'
+            icon_url: 'https://www.home-assistant.io/images/favicon-192x192-full.png'
+          footer:
+            text: "Generated from {{ camera_name }} at {{ states('sensor.date_time_iso') }}"
+            icon_url: 'https://www.home-assistant.io/images/favicon-192x192-full.png'
+          thumbnail:
+            url: 'https://www.home-assistant.io/images/favicon-192x192-full.png'
+          image:
+            url: "{{ snapshot_create_file_path }}"
