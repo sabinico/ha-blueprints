@@ -95,7 +95,6 @@ action:
 
   - service: notify.sabi_home
     data:
-      type: notify
       message: ""
       target: ["141550930465259520", "1135288079637303316"]
       data:
