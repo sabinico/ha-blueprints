@@ -1,5 +1,5 @@
 blueprint:
-  name: Send a camera snapshot notification when motion is detected
+  name: Send a camera record to discord when motion is detected
   description: 'This automation blueprint creates a camera snapshot if motion is detected  and
     sends a notification with the screenshot.
 
@@ -57,7 +57,29 @@ blueprint:
           unit_of_measurement: seconds
           mode: slider
           step: 1.0
-  source_url: https://github.com/sabinico/ha-blueprints/blob/main/camera_snapshot_on_motion.yml
+    duration:
+      name: Duration
+      description: Duración prevista de la grabación. La duración real puede variar.
+      default: ''
+      selector:
+        number:
+          min: 0.0
+          max: 60.0
+          unit_of_measurement: seconds
+          mode: slider
+          step: 1.0
+    lookback:
+      name: Lookback (Optional)
+      description: Período retrospectivo planificado para incluir en la grabación (además de la duración). Solo disponible si actualmente hay una transmisión HLS activa. La duración real del período retrospectivo puede variar.
+      default: ''
+      selector:
+        number:
+          min: 0.0
+          max: 60.0
+          unit_of_measurement: seconds
+          mode: slider
+          step: 1.0
+  source_url: https://github.com/sabinico/ha-blueprints/blob/main/camera_record_on_motion.yml
 trigger:
   platform: state
   entity_id: !input motion_sensor
@@ -73,16 +95,20 @@ variables:
   notification_title: !input notification_title
   notification_message: !input notification_message
   delay: !input delay
+  duration: !input duration
+  lookback: !input lookback
   snapshot_create_file_path: /config/www/tmp/snapshot_{{ states[camera].object_id
-    }}.jpg
+    }}.mp4
   snapshot_access_file_path: '{{ snapshot_create_file_path | replace(''/config/www'',''/local'')
     }}'
 action:
 - delay: '{{ delay }}'
-- service: camera.snapshot
+- service: camera.record
   entity_id: !input camera
   data:
     filename: '{{ snapshot_create_file_path }}'
+    duration: '{{ duration }}'
+    lookback: '{{ lookback }}'
 - device_id: !input notify_device
   domain: mobile_app
   type: notify
@@ -106,7 +132,7 @@ action:
         title: Motion Detected
         description: Se ha detectado movimiento en {{ motion_sensor_name }}
         url: https://my.home-assistant.io/
-        color: 5685745
+        color: 15816278
         author:
           name: Sabi Home Assistant
           url: https://my.home-assistant.io/
